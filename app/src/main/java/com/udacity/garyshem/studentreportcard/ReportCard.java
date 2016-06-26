@@ -16,7 +16,7 @@ public class ReportCard {
     private ArrayList<Grade> mGrades = new ArrayList<>();
     private int mYear;
 
-    public ReportCard(int year){
+    public ReportCard(int year) {
         // Any validation check required here?
         mYear = year;
     }
@@ -24,28 +24,28 @@ public class ReportCard {
     /**
      * Getter for year
      */
-    public int getYear(){
+    public int getYear() {
         return mYear;
     }
 
     /**
      * Grade setter for percentage-based systems
      */
-    public void setGrade(String subjectName, int grade){
+    public void setGrade(String subjectName, int grade) {
 
         // I am not sure what's the correct way of checking for errors
         // I know the basics of the exception mechanism,
         // but not sure if it is appropriate in android
         // It'd be awesome to get some insights regarding this
-        if (grade < 0 || grade > 100){
+        if (grade < 0 || grade > 100) {
             // error resolving code goes here
             // throwing an exception at least provides info that an error has occurred
             throw new RuntimeException("invalid grade, should be between 0 and 100");
         }
 
-        for(int i = 0; i < mGrades.size(); i++){
+        for (int i = 0; i < mGrades.size(); i++) {
             Grade currentGrade = mGrades.get(i);
-            if (subjectName.equals(currentGrade.subjectName)){
+            if (subjectName.equals(currentGrade.subjectName)) {
                 currentGrade.grade = grade;
                 return;
             }
@@ -60,10 +60,10 @@ public class ReportCard {
     /**
      * Grade getter for percentage-based systems
      */
-    public int getGradePercentage(String subjectName){
-        for(int i = 0; i < mGrades.size(); i++){
+    public int getGradePercentage(String subjectName) {
+        for (int i = 0; i < mGrades.size(); i++) {
             Grade currentGrade = mGrades.get(i);
-            if (subjectName.equals(currentGrade.subjectName)){
+            if (subjectName.equals(currentGrade.subjectName)) {
                 return currentGrade.grade;
             }
         }
@@ -75,20 +75,21 @@ public class ReportCard {
     /**
      * Grade setter for character-based systems
      */
-    public void setGrade(String subjectName, char gradeCharacter){
+    public void setGrade(String subjectName, char gradeCharacter) {
         // This method actually assigns an integer value to the grade
         // based on the thresholds we've declared
-        for (int i = 0; i < mGradeCharacters.length; i++){
-            if (gradeCharacter == mGradeCharacters[i]){
+        for (int i = 0; i < mGradeCharacters.length; i++) {
+            if (gradeCharacter == mGradeCharacters[i]) {
                 // Call the other setGrade method, providing required integer number
                 setGrade(subjectName, mGradeThresholds[i]);
             }
         }
     }
+
     /**
      * Grade getter for percentage-based systems
      */
-    public char getGradeCharacter(String subjectName){
+    public char getGradeCharacter(String subjectName) {
         // This method essentially gets the grade percentage
         // and then converts it to character
         // If a card does not have the grade yet, getGradePercentage will throw an error
@@ -96,10 +97,14 @@ public class ReportCard {
         int gradePercentage = getGradePercentage(subjectName);
         return convertGradeToChar(gradePercentage);
     }
-    private char convertGradeToChar(int grade){
 
-        for(int i = 0; i < mGradeThresholds.length; i++){
-            if (grade >= mGradeThresholds[i]){
+    /**
+     * Method for converting integer grades into characters
+     */
+    private char convertGradeToChar(int grade) {
+
+        for (int i = 0; i < mGradeThresholds.length; i++) {
+            if (grade >= mGradeThresholds[i]) {
                 return mGradeCharacters[i];
             }
         }
@@ -110,10 +115,10 @@ public class ReportCard {
     /**
      * Method for printing grade percentages in readable form
      */
-    public String getPercentageGradeString(){
+    public String getPercentageGradeString() {
         StringBuilder result = new StringBuilder();
-        result.append(getYear()+ System.getProperty("line.separator"));
-        for (int i = 0; i < mGrades.size(); i++){
+        result.append(getYear() + System.getProperty("line.separator"));
+        for (int i = 0; i < mGrades.size(); i++) {
             Grade currentGrade = mGrades.get(i);
             String subjectName = currentGrade.subjectName;
             int grade = currentGrade.grade;
@@ -122,14 +127,15 @@ public class ReportCard {
         }
         return result.toString();
     }
+
     /**
      * Method for printing grade characters in readable form
      */
-    public String getCharacterGradeString(){
+    public String getCharacterGradeString() {
         StringBuilder result = new StringBuilder();
         result.append(String.format(Locale.getDefault(), "%s: %d%s",
                 "Year", getYear(), System.getProperty("line.separator")));
-        for (int i = 0; i < mGrades.size(); i++){
+        for (int i = 0; i < mGrades.size(); i++) {
             Grade currentGrade = mGrades.get(i);
             String subjectName = currentGrade.subjectName;
             char grade = convertGradeToChar(currentGrade.grade);
@@ -140,17 +146,26 @@ public class ReportCard {
     }
 
     /**
+     * Returns grades in character form
+     */
+    @Override
+    public String toString() {
+        return getCharacterGradeString();
+    }
+
+    /**
      * Class for storing grades
-     *
+     * <p/>
      * This is simply a storage, all validation checks and conversions
      * are done by the RecordCard class
      */
-    private class Grade{
+    private class Grade {
         private String subjectName;
         private int grade;
+
         // Constructor for number-based systems
         // Conversion to characters is done by ReportCard class
-        public Grade(String subjectName, int grade){
+        public Grade(String subjectName, int grade) {
             this.subjectName = subjectName;
             this.grade = grade;
         }
